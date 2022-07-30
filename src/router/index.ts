@@ -1,8 +1,8 @@
 import * as VueRouter from 'vue-router'
-import Home from '@/pages/Home/index.vue'
+import HomePage from '@/pages/HomePage.vue'
 
 const routes = [
-  { path: '/', component: Home }
+  { path: '/', component: HomePage }
   // { path: '/about', component: About }
 ]
 const router = VueRouter.createRouter({
