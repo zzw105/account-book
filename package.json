@@ -13,6 +13,9 @@
     "commit": "git add . && git-cz"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "less": "^4.1.3",
+    "less-loader": "7.x",
     "vant": "^3.5.2",
     "vue": "^3.2.37",
     "vue-router": "4"
