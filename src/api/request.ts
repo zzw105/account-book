@@ -1,6 +1,6 @@
 import axios from 'axios'
 let ConfigBaseURL = 'http://node.zzw105.com/' //默认路径，这里也可以使用env来判断环境
-if (import.meta.env.DEV) ConfigBaseURL = 'http://172.0.0.1:1111/'
+if (import.meta.env.DEV) ConfigBaseURL = 'http://localhost:1111/'
 
 //使用create方法创建axios实例
 const request = axios.create({
