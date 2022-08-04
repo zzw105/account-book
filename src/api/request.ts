@@ -1,3 +1,4 @@
+import router from '@/router'
 import axios from 'axios'
 import { Notify } from 'vant'
 let ConfigBaseURL = 'http://node.zzw105.com/' //默认路径，这里也可以使用env来判断环境
@@ -13,16 +14,29 @@ const request = axios.create({
 })
 // 添加请求拦截器
 request.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  config.headers!.token = token || ''
   return config
 })
 // 添加响应拦截器
 request.interceptors.response.use(
   (response) => {
     const resData = response.data
-    if (resData.code === 400) {
-      Notify({ type: 'warning', message: resData.message })
+
+    if (resData.code !== 200) {
+      switch (resData.code) {
+        case 401:
+          // token错误
+          Notify({ type: 'warning', message: '登陆超时请重新登陆' })
+          router.push({ name: 'login' })
+          break
+        default:
+          // 统一弹出错误
+          Notify({ type: 'warning', message: '系统错误' })
+          break
+      }
     }
-    return resData
+    return response.data
   },
   (error) => {
     console.log('TCL: error', error)

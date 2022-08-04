@@ -33,19 +33,27 @@ import { ref } from 'vue'
 import { Dialog, Notify } from 'vant'
 import APIS from '@/api'
 import { checkStr } from '@/utils/index'
+import router from '@/router/index.js'
+
 const userName = ref('')
 const password = ref('')
 const checked = ref(false)
 const isLogin = ref(true)
+
+// 查看用户协议
 const read = () => {
   Dialog.alert({
     title: '用户协议',
     message: '壹零伍的项目全得听壹零伍的'
   })
 }
+
+// 切换登陆注册状态
 const changeLogin = () => {
   isLogin.value = !isLogin.value
 }
+
+// 登陆注册
 const login = async () => {
   // 处理空格
   userName.value = userName.value.trim()
@@ -58,14 +66,20 @@ const login = async () => {
       Notify({ type: 'warning', message: '用户名和密码不能为空' })
       return
     }
-    await APIS.login(data)
+
+    const res = await APIS.LOGIN(data)
+    if (res.code === 200) {
+      Notify({ type: 'success', message: '登陆成功' })
+      localStorage.setItem('token', res.token)
+      router.push({ name: 'home' })
+    }
   } else {
     // 注册规则处理
     if (!checkStr(userName.value, 'userName')) {
       Notify({ type: 'warning', message: '用户名长度在2~18之间，只能包含字母、数字' })
       return
     }
-    if (!checkStr(userName.value, 'pwd')) {
+    if (!checkStr(password.value, 'pwd')) {
       Notify({ type: 'warning', message: '密码以字母开头，长度在6~18之间，只能包含字母、数字和下划线' })
       return
     }
@@ -73,7 +87,13 @@ const login = async () => {
       Notify({ type: 'warning', message: '请阅读并同意《用户协议》' })
       return
     }
-    await APIS.register(data)
+    const res = await APIS.REGISTER(data)
+    if (res.code === 200) {
+      Notify({ type: 'success', message: '注册成功' })
+      isLogin.value = true
+      userName.value = ''
+      password.value = ''
+    }
   }
 }
 </script>
