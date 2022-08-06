@@ -61,3 +61,42 @@ export const checkStr = (str: string, type: checkStrType) => {
       return true
   }
 }
+
+export const iconInfoList = [
+  {
+    name: '购物消费',
+    icon: 'buy',
+    children: [
+      {
+        name: '个人护肤',
+        icon: 'lip-gloss'
+      },
+      {
+        name: '手机数码',
+        icon: 'phone'
+      }
+    ]
+  },
+  {
+    name: '食品餐饮',
+    icon: 'chopsticks-fork',
+    children: [
+      {
+        name: '水果',
+        icon: 'apple-one'
+      },
+      {
+        name: '早餐',
+        icon: 'bread-machine'
+      },
+      {
+        name: '午餐',
+        icon: 'nutrition'
+      },
+      {
+        name: '晚餐',
+        icon: 'cooking'
+      }
+    ]
+  }
+]

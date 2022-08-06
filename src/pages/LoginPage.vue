@@ -21,7 +21,7 @@
       </van-cell-group>
       <div class="bottom">
         <div @click="changeLogin">{{ !isLogin ? '前往登陆' : '前往注册' }}</div>
-        <div v-show="isLogin">忘记密码</div>
+        <div v-show="isLogin" @click="test">忘记密码</div>
       </div>
       <div class="checkBox"><van-checkbox v-model="checked" icon-size="15px">已阅读并同意</van-checkbox><a href="JavaScript:;" @click="read">《用户协议》</a></div>
     </div>
@@ -34,6 +34,7 @@ import { Dialog, Notify } from 'vant'
 import APIS from '@/api'
 import { checkStr } from '@/utils/index'
 import router from '@/router/index.js'
+import apis from '@/api/apis.js'
 
 const userName = ref('')
 const password = ref('')
@@ -69,7 +70,7 @@ const login = async () => {
 
     const res = await APIS.LOGIN(data)
     if (res.code === 200) {
-      Notify({ type: 'success', message: '登陆成功' })
+      // Notify({ type: 'success', message: '登陆成功' })
       localStorage.setItem('token', res.token)
       router.push({ name: 'home' })
     }
@@ -95,6 +96,12 @@ const login = async () => {
       password.value = ''
     }
   }
+}
+
+// 测试
+const test = async () => {
+  const a = await apis.TEST()
+  console.log(a)
 }
 </script>
 

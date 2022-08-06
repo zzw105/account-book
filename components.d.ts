@@ -7,13 +7,21 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AddRecord: typeof import('./src/components/AddRecord.vue')['default']
+    BottomTabbar: typeof import('./src/components/BottomTabbar.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanButton: typeof import('vant/es')['Button']
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanCheckbox: typeof import('vant/es')['Checkbox']
     VanField: typeof import('vant/es')['Field']
+    VanIcon: typeof import('vant/es')['Icon']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanTab: typeof import('vant/es')['Tab']
+    VanTabbar: typeof import('vant/es')['Tabbar']
+    VanTabbarItem: typeof import('vant/es')['TabbarItem']
+    VanTabs: typeof import('vant/es')['Tabs']
   }
 }

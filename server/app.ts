@@ -39,6 +39,7 @@ app.use(
     path: ['/register', '/login']
   })
 )
+// 解析出来的信息在req.auth中
 
 // 数据库信息
 const connection = mysql.createConnection({
@@ -69,16 +70,17 @@ const getUserRows = () => {
 getUserRows()
 
 // 首页请求 用于查看服务
-app.get('/', (req, res) => {
+app.get('/', (req, res, a) => {
+  console.log(req)
+
   res.json({ code: 200, data: userRows })
 })
-
 // 注册
 app.post('/register', (req, res) => {
   const body = req.body
-  const id = userRows.length
+  // const id = userRows.length
   if (!userRows.find((item) => item.userName === body.userName)) {
-    connection.query('insert into user set ?', { ...body, id }, function (err) {
+    connection.query('insert into user set ?', { ...body }, function (err) {
       if (err) {
         throw err
       }
@@ -101,9 +103,11 @@ app.post('/register', (req, res) => {
 // 登陆
 app.post('/login', (req, res) => {
   const body = req.body
+  console.log(body)
+
   const userInfo = userRows.find((item) => item.userName === body.userName)
   if (userInfo && userInfo.password === body.password) {
-    const tokenStr = jwt.sign({ username: body.username }, SECRET_KEY, { expiresIn: '1h' })
+    const tokenStr = jwt.sign({ userName: body.userName }, SECRET_KEY, { expiresIn: '1h' })
 
     res.json({
       code: 200,

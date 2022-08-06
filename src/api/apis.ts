@@ -7,5 +7,8 @@ export default {
   },
   REGISTER(data: any): Promise<resType> {
     return request.post('/register', data)
+  },
+  TEST(): Promise<resType> {
+    return request.get('/')
   }
 }
