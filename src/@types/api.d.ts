@@ -1,3 +1,12 @@
+export interface accountProps {
+  id: number
+  userName: string
+  dateTime: string
+  price: string
+  leaveOne: string
+  leaveTwo: string
+  remarkText: string
+}
 // /register
 export interface resType {
   code: number
@@ -6,4 +15,8 @@ export interface resType {
 //  /login
 export interface resLoginType extends resType {
   token: string
+}
+//  /getAccount
+export interface resGetAccountType extends resType {
+  data: accountProps[]
 }

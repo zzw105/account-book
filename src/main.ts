@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from '@/router'
-import { Button, NavBar, Field, CellGroup, Col, Row, Checkbox, CheckboxGroup, Dialog, Tabbar, TabbarItem, ActionSheet, Tab, Tabs } from 'vant'
+import { Button, NavBar, Field, CellGroup, Col, Row, Checkbox, CheckboxGroup, Dialog, Tabbar, TabbarItem, ActionSheet, Tab, Tabs, Calendar } from 'vant'
 import APIS from '@/api'
 import 'vant/es/dialog/style'
 import 'vant/es/toast/style'
@@ -25,6 +25,7 @@ app
   .use(ActionSheet)
   .use(Tab)
   .use(Tabs)
+  .use(Calendar)
   .mount('#app')
 app.config.globalProperties.$axios = APIS
 // root@localhost: -5wrwSnRgk)j

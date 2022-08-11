@@ -1,12 +1,20 @@
 import express = require('express')
 import cors = require('cors')
 import mysql = require('mysql')
+import { Request } from 'express'
 
 const jwt = require('jsonwebtoken')
 
 const { expressjwt } = require('express-jwt')
 
 const SECRET_KEY = 'kite1874'
+
+declare module 'express' {
+  // eslint-disable-next-line no-unused-vars
+  interface Request {
+    auth: { userName: string }
+  }
+}
 
 interface userInfo {
   id: number
@@ -103,12 +111,9 @@ app.post('/register', (req, res) => {
 // 登陆
 app.post('/login', (req, res) => {
   const body = req.body
-  console.log(body)
-
   const userInfo = userRows.find((item) => item.userName === body.userName)
   if (userInfo && userInfo.password === body.password) {
     const tokenStr = jwt.sign({ userName: body.userName }, SECRET_KEY, { expiresIn: '1h' })
-
     res.json({
       code: 200,
       message: '登陆成功',
@@ -120,6 +125,42 @@ app.post('/login', (req, res) => {
       message: '用户名或密码不正确'
     })
   }
+})
+
+// 添加信息
+app.post('/addAccount', (req: Request, res) => {
+  const body = req.body
+  connection.query('insert into book set ?', { ...body, userName: req.auth.userName }, function (err) {
+    if (err) {
+      res.json({
+        code: 400,
+        message: '添加失败'
+      })
+    }
+    res.json({
+      code: 200,
+      message: '添加成功'
+    })
+  })
+})
+
+// 根据用户名获取信息
+app.get('/getAccount', (req: Request, res) => {
+  connection.query('select * from book', function (err, row) {
+    if (err) {
+      res.json({
+        code: 400,
+        message: '获取失败'
+      })
+    } else {
+      const resData = row.filter((item) => item.userName === req.auth.userName)
+      res.json({
+        code: 200,
+        message: '获取成功',
+        data: resData
+      })
+    }
+  })
 })
 
 //定义一个抛出错误的中间件 当token失效时 返回信息
