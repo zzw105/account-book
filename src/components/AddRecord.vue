@@ -23,7 +23,7 @@
       <div class="priceBox">
         <div class="price">
           <div class="priceSymbol">－</div>
-          <van-field v-model="price" placeholder="请输入金额" />
+          <van-field v-model="price" type="number" placeholder="请输入金额" @click="clickPrice" />
         </div>
         <div class="date" @click="() => (calendarIsShow = true)">{{ dateTime.format('YYYY-MM-DD HH:mm') }}</div>
       </div>
@@ -36,7 +36,7 @@
         <van-button type="default" @click="onClose">取消</van-button>
         <van-button type="primary" @click="addAccount">新增</van-button>
       </div>
-      <van-calendar v-model:show="calendarIsShow" :min-date="new Date(2020, 0, 1)" :lazy-render="true" confirm-text="确认日期" @confirm="confirmationDate" />
+      <van-calendar v-model:show="calendarIsShow" :min-date="new Date(2020, 0, 1)" :max-date="new Date()" :lazy-render="true" confirm-text="确认日期" @confirm="confirmationDate" />
       <van-popup v-model:show="currentTimeIsShow" position="bottom">
         <van-datetime-picker v-model="hoursMinute" confirm-button-text=" " cancel-button-text=" " type="time" title="选择时间" />
         <van-button round color="#ee0a24" class="timeBtn" type="primary" block :swipe-duration="100" @click="confirmationTime">确认时间</van-button>
@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
 const tabsActive = ref(0) // 选择的栏位
 const leaveOne = ref('') // 一级分类
 const leaveTwo = ref('') // 二级分类
-const price = ref(0) // 金额
+const price = ref('0') // 金额
 const calendarIsShow = ref(false) // 是否展示日历选择
 const currentTimeIsShow = ref(false) // 是否展示时间选择
 const dateTime = ref<Dayjs>(dayjs()) // dayjs数值
@@ -86,6 +86,12 @@ const confirmationTime = () => {
   dateTime.value = dateTime.value.minute(+M)
   calendarIsShow.value = false
   currentTimeIsShow.value = false
+}
+
+const clickPrice = () => {
+  if (price.value === '0') {
+    price.value = ''
+  }
 }
 
 // 关闭弹出框
@@ -127,9 +133,12 @@ const setLeaveTwo = (name: string) => {
 }
 .levelIconBox {
   display: flex;
+  flex-wrap: wrap;
+
   .icon {
     display: flex;
     width: 20%;
+    margin: 5px 0;
     flex-direction: column;
     justify-content: center;
     align-items: center;

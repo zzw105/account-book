@@ -68,12 +68,49 @@ export const iconInfoList = [
     icon: 'buy',
     children: [
       {
+        name: '日常家居',
+        icon: 'cooking-pot'
+      },
+      {
         name: '个人护肤',
         icon: 'lip-gloss'
       },
       {
         name: '手机数码',
         icon: 'phone'
+      },
+
+      {
+        name: '虚拟充值',
+        icon: 'finance'
+      },
+      {
+        name: '生活电器',
+        icon: 'washing-machine'
+      },
+      {
+        name: '配饰腕表',
+        icon: 'iwatch'
+      },
+      {
+        name: '母婴玩具',
+        icon: 'baby-bottle'
+      },
+      {
+        name: '服饰运动',
+        icon: 'clothes-crew-neck'
+      },
+      {
+        name: '宠物用品',
+        icon: 'dog'
+      },
+      {
+        name: '办公用具',
+        icon: 'paperclip'
+      },
+      {
+        name: '装修装饰',
+        icon: 'building-one'
       }
     ]
   },
@@ -96,6 +133,198 @@ export const iconInfoList = [
       {
         name: '晚餐',
         icon: 'cooking'
+      },
+      {
+        name: '酒水饮料',
+        icon: 'bottle-one'
+      },
+      {
+        name: '休闲零食',
+        icon: 'candy'
+      },
+      {
+        name: '生鲜食品',
+        icon: 'chicken'
+      },
+      {
+        name: '请客吃饭',
+        icon: 'chicken'
+      },
+      {
+        name: '粮油调味',
+        icon: 'bottle-three'
+      }
+    ]
+  },
+  {
+    name: '交通出行',
+    icon: 'road',
+    children: [
+      {
+        name: '打车',
+        icon: 'taxi'
+      },
+      {
+        name: '公共交通',
+        icon: 'bus-two'
+      },
+      {
+        name: '停车费',
+        icon: 'parking'
+      },
+      {
+        name: '加油',
+        icon: 'petrol'
+      },
+      {
+        name: '火车',
+        icon: 'train'
+      },
+      {
+        name: '飞机',
+        icon: 'airplane'
+      },
+      {
+        name: '保养修车',
+        icon: 'car'
+      }
+    ]
+  },
+  {
+    name: '休闲娱乐',
+    icon: 'gamepad',
+    children: [
+      {
+        name: '游戏',
+        icon: 'gamepad'
+      },
+      {
+        name: '旅游度假',
+        icon: 'trunk'
+      },
+      {
+        name: '电影唱歌',
+        icon: 'movie'
+      },
+      {
+        name: '运动健身',
+        icon: 'dumbbell'
+      },
+      {
+        name: '足浴按摩',
+        icon: 'massage-table'
+      },
+      {
+        name: '棋牌桌游',
+        icon: 'poker'
+      },
+      {
+        name: '酒吧',
+        icon: 'cocktail'
+      },
+      {
+        name: '演出',
+        icon: 'tickets-two'
+      }
+    ]
+  },
+  {
+    name: '居家生活',
+    icon: 'home-two',
+    children: [
+      {
+        name: '话费宽带',
+        icon: 'phone-call'
+      },
+      {
+        name: '电费',
+        icon: 'lightning'
+      },
+      {
+        name: '水费',
+        icon: 'water-level'
+      },
+      {
+        name: '燃气费',
+        icon: 'fire'
+      },
+      {
+        name: '物业费',
+        icon: 'city'
+      },
+      {
+        name: '房租还贷',
+        icon: 'bank'
+      },
+      {
+        name: '车位费',
+        icon: 'garage'
+      },
+      {
+        name: '家政清洁',
+        icon: 'vacuum-cleaner'
+      }
+    ]
+  },
+  {
+    name: '文化教育',
+    icon: 'bachelor-cap',
+    children: [
+      {
+        name: '学费',
+        icon: 'degree-hat'
+      },
+      {
+        name: '书包杂志',
+        icon: 'book-open'
+      },
+      {
+        name: '培训考试',
+        icon: 'bookshelf'
+      }
+    ]
+  },
+  {
+    name: '送礼人情',
+    icon: 'gift',
+    children: [
+      {
+        name: '孝敬长辈',
+        icon: 'love-and-help'
+      },
+      {
+        name: '礼物',
+        icon: 'gift'
+      },
+      {
+        name: '借出',
+        icon: 'expenses-one'
+      },
+      {
+        name: '红包',
+        icon: 'red-envelope'
+      },
+      {
+        name: '打赏',
+        icon: 'pay-code'
+      }
+    ]
+  },
+  {
+    name: '医疗健康',
+    icon: 'stethoscope',
+    children: [
+      {
+        name: '滋补保养',
+        icon: 'health-products'
+      },
+      {
+        name: '医院',
+        icon: 'hospital-four'
+      },
+      {
+        name: '买药',
+        icon: 'pills'
       }
     ]
   }
