@@ -2,7 +2,7 @@ export interface accountProps {
   id: number
   userName: string
   dateTime: string
-  price: string
+  price: number
   leaveOne: string
   leaveTwo: string
   remarkText: string

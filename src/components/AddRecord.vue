@@ -25,7 +25,7 @@
           <div class="priceSymbol">－</div>
           <van-field v-model="price" placeholder="请输入金额" />
         </div>
-        <div class="date" @click="() => (calendarIsShow = true)">{{ calendarDate === '' ? '请选择日期' : calendarDate }}</div>
+        <div class="date" @click="() => (calendarIsShow = true)">{{ dateTime.format('YYYY-MM-DD HH:mm') }}</div>
       </div>
       <div class="line"></div>
       <div class="remark">
@@ -36,7 +36,11 @@
         <van-button type="default" @click="onClose">取消</van-button>
         <van-button type="primary" @click="addAccount">新增</van-button>
       </div>
-      <van-calendar v-model:show="calendarIsShow" @confirm="onConfirm" />
+      <van-calendar v-model:show="calendarIsShow" :min-date="new Date(2020, 0, 1)" :lazy-render="true" confirm-text="确认日期" @confirm="confirmationDate" />
+      <van-popup v-model:show="currentTimeIsShow" position="bottom">
+        <van-datetime-picker v-model="hoursMinute" confirm-button-text=" " cancel-button-text=" " type="time" title="选择时间" />
+        <van-button round color="#ee0a24" class="timeBtn" type="primary" block :swipe-duration="100" @click="confirmationTime">确认时间</van-button>
+      </van-popup>
     </van-tabs>
   </van-action-sheet>
 </template>
@@ -46,6 +50,7 @@ import { ref } from 'vue'
 import { iconInfoList } from '@/utils'
 import APIS from '@/api'
 import { Notify } from 'vant'
+import dayjs, { Dayjs } from 'dayjs'
 
 interface Props {
   activeSheetIsShow: boolean
@@ -53,7 +58,6 @@ interface Props {
 }
 
 const emit = defineEmits(['update:activeSheetIsShow'])
-
 const props = withDefaults(defineProps<Props>(), {
   activeSheetIsShow: false,
   getAccount: () => {}
@@ -63,16 +67,25 @@ const tabsActive = ref(0) // 选择的栏位
 const leaveOne = ref('') // 一级分类
 const leaveTwo = ref('') // 二级分类
 const price = ref(0) // 金额
-const calendarIsShow = ref(false)
-const calendarDate = ref('')
-const dateTime = ref(0)
-const remarkText = ref('')
+const calendarIsShow = ref(false) // 是否展示日历选择
+const currentTimeIsShow = ref(false) // 是否展示时间选择
+const dateTime = ref<Dayjs>(dayjs()) // dayjs数值
+const hoursMinute = ref(dayjs().format('HH:mm')) // 小时分钟选择器数值
+const remarkText = ref('') // 注释文字
 
-const formatDate = (date: Date) => `${date.getMonth() + 1}月${date.getDate()}日`
-const onConfirm = (value: Date) => {
+// const formatDate = (date: Date) => `${date.getMonth() + 1}月${date.getDate()}日`
+const confirmationDate = (value: Date) => {
+  // calendarDate.value = formatDate(value)
+  dateTime.value = dayjs(value)
+  currentTimeIsShow.value = true
+}
+
+const confirmationTime = () => {
+  const [H, M] = hoursMinute.value.split(':')
+  dateTime.value = dateTime.value.hour(+H)
+  dateTime.value = dateTime.value.minute(+M)
   calendarIsShow.value = false
-  calendarDate.value = formatDate(value)
-  dateTime.value = value.getTime()
+  currentTimeIsShow.value = false
 }
 
 // 关闭弹出框
@@ -85,9 +98,9 @@ const addAccount = async () => {
   const data = {
     leaveOne: leaveOne.value,
     leaveTwo: leaveTwo.value,
-    price: price.value,
+    price: -price.value,
     remarkText: remarkText.value,
-    dateTime: dateTime.value
+    dateTime: dateTime.value.format('YYYY-MM-DD HH:mm:ss')
   }
   const res = await APIS.ADD_ACCOUNT(data)
   if (res.code === 200) {
@@ -182,5 +195,10 @@ const setLeaveTwo = (name: string) => {
   .van-button {
     width: 40%;
   }
+}
+.timeBtn {
+  width: 90%;
+  height: 40px;
+  margin: 8px auto;
 }
 </style>

@@ -7,8 +7,15 @@
       </div>
     </template>
   </van-nav-bar>
-  <div>{{ accountArr }}</div>
-  <van-button type="primary" @click="() => (activeSheetIsShow = true)">添加</van-button>
+  <div class="main">
+    <van-button type="primary" class="addBtn" block @click="() => (activeSheetIsShow = true)">
+      <iconpark-icon name="add-three"></iconpark-icon>
+      <div>添加一条新记账</div>
+    </van-button>
+    <template v-for="account in accountArr" :key="account.id">
+      <AccountItem :account="account" />
+    </template>
+  </div>
   <AddRecord v-model:active-sheet-is-show="activeSheetIsShow" :get-account="getAccount"></AddRecord>
   <BottomTabbar :now-active="0" :placeholder="true" />
 </template>
@@ -19,6 +26,7 @@ import { accountProps } from '@/@types/api'
 import APIS from '@/api'
 import { onMounted, ref } from 'vue'
 import AddRecord from '../components/AddRecord.vue'
+import AccountItem from '@/components/AccountItem.vue'
 
 const activeSheetIsShow = ref(false) // 是否显示添加框
 const accountArr = ref<accountProps[]>([]) // 账目列表
@@ -40,6 +48,18 @@ onMounted(async () => {
   span {
     margin-left: 5px;
     font-weight: 700;
+  }
+}
+.main {
+  padding: 8px;
+  .addBtn {
+    font-size: 17px;
+    :deep(.van-button__text) {
+      display: flex;
+      iconpark-icon {
+        margin-right: 10px;
+      }
+    }
   }
 }
 </style>

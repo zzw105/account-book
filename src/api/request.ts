@@ -1,7 +1,7 @@
 import router from '@/router'
 import axios from 'axios'
 import { Notify } from 'vant'
-let ConfigBaseURL = 'http://node.zzw105.com/' //默认路径，这里也可以使用env来判断环境
+let ConfigBaseURL = 'http://node.zzw105.com/'
 if (import.meta.env.DEV) ConfigBaseURL = 'http://localhost:1111/'
 
 //使用create方法创建axios实例

@@ -132,15 +132,17 @@ app.post('/addAccount', (req: Request, res) => {
   const body = req.body
   connection.query('insert into book set ?', { ...body, userName: req.auth.userName }, function (err) {
     if (err) {
+      console.log(err)
       res.json({
         code: 400,
         message: '添加失败'
       })
+    } else {
+      res.json({
+        code: 200,
+        message: '添加成功'
+      })
     }
-    res.json({
-      code: 200,
-      message: '添加成功'
-    })
   })
 })
 
@@ -154,6 +156,11 @@ app.get('/getAccount', (req: Request, res) => {
       })
     } else {
       const resData = row.filter((item) => item.userName === req.auth.userName)
+      resData.sort((a, b) => {
+        return b.dateTime - a.dateTime
+      })
+      console.log(resData)
+
       res.json({
         code: 200,
         message: '获取成功',
@@ -166,9 +173,9 @@ app.get('/getAccount', (req: Request, res) => {
 //定义一个抛出错误的中间件 当token失效时 返回信息
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    return res.json({ status: 401, message: '登陆过期' })
+    return res.json({ code: 401, message: '登陆过期' })
   }
-  res.json({ status: 500, message: '未知错误' })
+  res.json({ code: 500, message: '未知错误' })
 })
 
 // 启动服务
