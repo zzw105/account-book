@@ -6,7 +6,7 @@
         <div class="levelIconBox">
           <div v-for="iconListItem in iconInfoList" :key="iconListItem.name" class="icon" @click="setLeaveOne(iconListItem.name)">
             <iconpark-icon :name="iconListItem.icon" :size="25" :class="{ choose: leaveOne === iconListItem.name }"></iconpark-icon>
-            <div>{{ iconListItem.name }}</div>
+            <div class="name">{{ iconListItem.name }}</div>
           </div>
         </div>
         <div v-if="leaveOne !== ''" class="levelIconBox levelTwoIconBox">
@@ -22,7 +22,7 @@
       <van-tab title="债务">内容 4</van-tab>
       <div class="priceBox">
         <div class="price">
-          <div class="priceSymbol">－</div>
+          <div class="priceSymbol">-</div>
           <van-field v-model="price" type="number" placeholder="请输入金额" @click="clickPrice" />
         </div>
         <div class="date" @click="() => (calendarIsShow = true)">{{ dateTime.format('YYYY-MM-DD HH:mm') }}</div>
@@ -64,8 +64,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const tabsActive = ref(0) // 选择的栏位
-const leaveOne = ref('') // 一级分类
-const leaveTwo = ref('') // 二级分类
+const leaveOne = ref('其他') // 一级分类
+const leaveTwo = ref('其他') // 二级分类
 const price = ref('0') // 金额
 const calendarIsShow = ref(false) // 是否展示日历选择
 const currentTimeIsShow = ref(false) // 是否展示时间选择
@@ -152,6 +152,9 @@ const setLeaveTwo = (name: string) => {
       background-color: rgb(222, 221, 255);
     }
   }
+  .name {
+    font-size: 14px;
+  }
 }
 .levelTwoIconBox {
   margin: 3px;
@@ -162,7 +165,7 @@ const setLeaveTwo = (name: string) => {
     width: 16.6666666666666%;
   }
   .name {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 .line {

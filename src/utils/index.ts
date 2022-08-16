@@ -327,5 +327,15 @@ export const iconInfoList = [
         icon: 'pills'
       }
     ]
+  },
+  {
+    name: '其他',
+    icon: 'more-four',
+    children: [
+      {
+        name: '其他',
+        icon: 'more-four'
+      }
+    ]
   }
 ]

@@ -6,7 +6,7 @@
       <div class="remarkText">{{ account.remarkText }}</div>
     </div>
     <div class="priceTime">
-      <div class="price">－{{ -account.price }}</div>
+      <div class="price">-{{ -account.price }}</div>
       <div class="time">{{ day.format('YYYY-MM-DD HH:mm') }}</div>
     </div>
   </div>
