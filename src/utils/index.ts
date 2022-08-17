@@ -1,3 +1,5 @@
+import APIS from '@/api'
+
 type checkStrType =
   | 'phone'
   | 'tel'
@@ -19,6 +21,7 @@ type checkStrType =
   | 'HTML'
   | 'userName'
 
+// 正则匹配
 export const checkStr = (str: string, type: checkStrType) => {
   switch (type) {
     case 'phone': //手机号码
@@ -62,6 +65,7 @@ export const checkStr = (str: string, type: checkStrType) => {
   }
 }
 
+// 图标列表树
 export const iconInfoList = [
   {
     name: '购物消费',
@@ -339,3 +343,20 @@ export const iconInfoList = [
     ]
   }
 ]
+
+// 获取LocalStorage
+export const getLocalStorage = async (key: string) => {
+  let localStorageData = localStorage.getItem(key)
+  if (key === 'accountArr' && !localStorageData) {
+    const arr = await APIS.GET_ACCOUNT()
+    setLocalStorage('accountArr', JSON.stringify(arr.data))
+    localStorageData = JSON.stringify(arr.data)
+  }
+
+  return localStorageData
+}
+
+// 设置LocalStorage
+export const setLocalStorage = (key: string, value: string) => {
+  localStorage.setItem(key, value)
+}

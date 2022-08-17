@@ -21,12 +21,12 @@
 </template>
 
 <script setup lang="ts">
-// import APIS from '@/api'
 import { accountProps } from '@/@types/api'
-import APIS from '@/api'
 import { onMounted, ref } from 'vue'
 import AddRecord from '../components/AddRecord.vue'
 import AccountItem from '@/components/AccountItem.vue'
+import { getLocalStorage, setLocalStorage } from '@/utils'
+import APIS from '@/api'
 
 const activeSheetIsShow = ref(false) // 是否显示添加框
 const accountArr = ref<accountProps[]>([]) // 账目列表
@@ -35,10 +35,12 @@ const accountArr = ref<accountProps[]>([]) // 账目列表
 const getAccount = async () => {
   const arr = await APIS.GET_ACCOUNT()
   accountArr.value = arr.data
+  setLocalStorage('accountArr', JSON.stringify(arr.data))
 }
 
 onMounted(async () => {
-  await getAccount()
+  // 获取账目信息
+  accountArr.value = JSON.parse((await getLocalStorage('accountArr')) || '[]')
 })
 </script>
 
