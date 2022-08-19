@@ -79,8 +79,6 @@ getUserRows()
 
 // 首页请求 用于查看服务
 app.get('/', (req, res, a) => {
-  console.log(req)
-
   res.json({ code: 200, data: userRows })
 })
 // 注册
@@ -130,17 +128,54 @@ app.post('/login', (req, res) => {
 // 添加信息
 app.post('/addAccount', (req: Request, res) => {
   const body = req.body
-  connection.query('insert into book set ?', { ...body, userName: req.auth.userName }, function (err) {
+  if (body.id === -1) {
+    connection.query('insert into book set ?', { ...body, userName: req.auth.userName }, function (err) {
+      if (err) {
+        res.json({
+          code: 400,
+          message: '添加失败',
+          err
+        })
+      } else {
+        res.json({
+          code: 200,
+          message: '添加成功'
+        })
+      }
+    })
+  } else {
+    connection.query('update book set ?  where id = ?', [body, body.id], (err, data) => {
+      if (err) {
+        res.json({
+          code: 400,
+          message: '更新失败',
+          err
+        })
+      } else {
+        res.json({
+          code: 200,
+          message: '更新成功'
+        })
+      }
+    })
+  }
+})
+
+// 删除信息
+app.delete('/delAccount', (req: Request, res) => {
+  const body = req.body
+  connection.query('delete from book where id = ?', [body.id], (err, data) => {
     if (err) {
       console.log(err)
       res.json({
         code: 400,
-        message: '添加失败'
+        message: '删除失败',
+        err
       })
     } else {
       res.json({
         code: 200,
-        message: '添加成功'
+        message: '删除成功'
       })
     }
   })
@@ -152,15 +187,14 @@ app.get('/getAccount', (req: Request, res) => {
     if (err) {
       res.json({
         code: 400,
-        message: '获取失败'
+        message: '获取失败',
+        err
       })
     } else {
       const resData = row.filter((item) => item.userName === req.auth.userName)
       resData.sort((a, b) => {
         return b.dateTime - a.dateTime
       })
-      console.log(resData)
-
       res.json({
         code: 200,
         message: '获取成功',
@@ -175,6 +209,8 @@ app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     return res.json({ code: 401, message: '登陆过期' })
   }
+  console.log(err)
+
   res.json({ code: 500, message: '未知错误' })
 })
 

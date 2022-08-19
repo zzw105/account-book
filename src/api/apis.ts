@@ -11,6 +11,9 @@ export default {
   ADD_ACCOUNT(data: any): Promise<resType> {
     return request.post('/addAccount', data)
   },
+  DEL_ACCOUNT(data: any): Promise<resType> {
+    return request.delete('/delAccount', { data })
+  },
   GET_ACCOUNT(): Promise<resGetAccountType> {
     return request.get('/getAccount')
   },

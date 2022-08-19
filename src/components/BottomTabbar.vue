@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-tabbar v-model="active" @change="onChange">
+    <van-tabbar v-model="active" :placeholder="true" @change="onChange">
       <van-tabbar-item icon="home-o">
         <span>账本</span>
         <template #icon><iconpark-icon name="home"></iconpark-icon> </template>

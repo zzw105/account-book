@@ -32,7 +32,7 @@
 import { ref } from 'vue'
 import { Dialog, Notify } from 'vant'
 import APIS from '@/api'
-import { checkStr } from '@/utils/index'
+import { checkStr, setLocalStorage } from '@/utils/index'
 import router from '@/router/index.js'
 import apis from '@/api/apis.js'
 
@@ -72,6 +72,7 @@ const login = async () => {
     if (res.code === 200) {
       // Notify({ type: 'success', message: '登陆成功' })
       localStorage.setItem('token', res.token)
+      setLocalStorage('accountArr', '')
       router.push({ name: 'home' })
     }
   } else {

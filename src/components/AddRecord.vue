@@ -1,5 +1,5 @@
 <template>
-  <van-action-sheet :show="activeSheetIsShow" title="添加新记录" @close="onClose">
+  <van-action-sheet :show="activeSheetIsShow" title="添加新记录" :closeable="false" :lazy-render="false" @close="onClose">
     <van-tabs v-model:active="tabsActive">
       <van-tab title="支出">
         <div class="line topLine"></div>
@@ -31,10 +31,15 @@
       <div class="remark">
         <van-field v-model="remarkText" label-width="32" :colon="true" label="备注" placeholder="请输入备注" />
       </div>
+      <div v-if="id !== -1" class="line"></div>
+      <div v-if="id !== -1" class="util">
+        <div class="calendar"></div>
+        <van-button type="danger" class="delBtn" @click="del">删除记录</van-button>
+      </div>
       <div class="line"></div>
       <div class="btn">
         <van-button type="default" @click="onClose">取消</van-button>
-        <van-button type="primary" @click="addAccount">新增</van-button>
+        <van-button type="primary" @click="addAccount">{{ props.recordData ? '修改' : '新增' }}</van-button>
       </div>
       <van-calendar v-model:show="calendarIsShow" :min-date="new Date(2020, 0, 1)" :max-date="new Date()" :lazy-render="true" confirm-text="确认日期" @confirm="confirmationDate" />
       <van-popup v-model:show="currentTimeIsShow" position="bottom">
@@ -46,21 +51,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { iconInfoList } from '@/utils'
 import APIS from '@/api'
 import { Notify } from 'vant'
 import dayjs, { Dayjs } from 'dayjs'
+import { accountProps } from '@/@types/api'
 
 interface Props {
   activeSheetIsShow: boolean
+  recordData?: accountProps | null
   getAccount: () => void
 }
 
 const emit = defineEmits(['update:activeSheetIsShow'])
 const props = withDefaults(defineProps<Props>(), {
   activeSheetIsShow: false,
-  getAccount: () => {}
+  getAccount: () => {},
+  recordData: null
 })
 
 const tabsActive = ref(0) // 选择的栏位
@@ -72,6 +80,7 @@ const currentTimeIsShow = ref(false) // 是否展示时间选择
 const dateTime = ref<Dayjs>(dayjs()) // dayjs数值
 const hoursMinute = ref(dayjs().format('HH:mm')) // 小时分钟选择器数值
 const remarkText = ref('') // 注释文字
+const id = ref(-1)
 
 // const formatDate = (date: Date) => `${date.getMonth() + 1}月${date.getDate()}日`
 const confirmationDate = (value: Date) => {
@@ -99,6 +108,14 @@ const onClose = () => {
   emit('update:activeSheetIsShow', false)
 }
 
+const del = async () => {
+  const res = await APIS.DEL_ACCOUNT({ id: id.value })
+  if (res.code === 200) {
+    emit('update:activeSheetIsShow', false)
+    props.getAccount()
+  }
+}
+
 // 新增信息
 const addAccount = async () => {
   const data = {
@@ -106,7 +123,8 @@ const addAccount = async () => {
     leaveTwo: leaveTwo.value,
     price: -price.value,
     remarkText: remarkText.value,
-    dateTime: dateTime.value.format('YYYY-MM-DD HH:mm:ss')
+    dateTime: dateTime.value.format('YYYY-MM-DD HH:mm:ss'),
+    id: id.value
   }
   const res = await APIS.ADD_ACCOUNT(data)
   if (res.code === 200) {
@@ -119,12 +137,37 @@ const addAccount = async () => {
 // 设置一级分类
 const setLeaveOne = (name: string) => {
   leaveOne.value = name
+  leaveTwo.value = iconInfoList.find((item) => item.name === name)!.children[0].name
 }
 
 // 设置二级分类
 const setLeaveTwo = (name: string) => {
   leaveTwo.value = name
 }
+
+watch(
+  () => props.recordData,
+  (newData) => {
+    if (newData) {
+      leaveOne.value = newData.leaveOne
+      leaveTwo.value = newData.leaveTwo
+      price.value = -newData.price + ''
+      remarkText.value = newData.remarkText
+      dateTime.value = dayjs(newData.dateTime)
+      id.value = newData.id
+    } else {
+      leaveOne.value = '其他'
+      leaveTwo.value = '其他'
+      price.value = '0'
+      remarkText.value = ''
+      dateTime.value = dayjs()
+      id.value = -1
+    }
+  },
+  {
+    immediate: true
+  }
+)
 </script>
 
 <style scoped lang="less">
@@ -212,5 +255,12 @@ const setLeaveTwo = (name: string) => {
   width: 90%;
   height: 40px;
   margin: 8px auto;
+}
+.util {
+  display: flex;
+  padding: 0 5px;
+  .calendar {
+    flex: 1;
+  }
 }
 </style>
