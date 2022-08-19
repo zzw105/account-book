@@ -13,6 +13,11 @@
     "commit": "git add . && git-cz"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "dayjs": "^1.11.4",
+    "esbuild-windows-64": "^0.15.1",
+    "less": "^4.1.3",
+    "less-loader": "7.x",
     "vant": "^3.5.2",
     "vue": "^3.2.37",
     "vue-router": "4"
@@ -37,6 +42,7 @@
     "typescript": "^4.6.4",
     "unplugin-vue-components": "^0.21.2",
     "vite": "^3.0.0",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
     "vue-tsc": "^0.38.4"
   },
   "lint-staged": {
