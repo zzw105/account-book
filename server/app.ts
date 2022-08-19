@@ -129,6 +129,7 @@ app.post('/login', (req, res) => {
 app.post('/addAccount', (req: Request, res) => {
   const body = req.body
   if (body.id === -1) {
+    delete body.id
     connection.query('insert into book set ?', { ...body, userName: req.auth.userName }, function (err) {
       if (err) {
         res.json({

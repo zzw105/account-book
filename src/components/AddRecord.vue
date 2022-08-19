@@ -118,6 +118,10 @@ const del = async () => {
 
 // 新增信息
 const addAccount = async () => {
+  if (+price.value === 0) {
+    Notify({ type: 'warning', message: '金额不能为0' })
+    return
+  }
   const data = {
     leaveOne: leaveOne.value,
     leaveTwo: leaveTwo.value,
