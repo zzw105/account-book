@@ -26,12 +26,13 @@ import { onMounted, ref } from 'vue'
 import AddRecord from '../components/AddRecord.vue'
 import AccountItem from '@/components/AccountItem.vue'
 import { getLocalStorage, setLocalStorage } from '@/utils'
+// import { useGlobalStore } from '@/store/global'
 import APIS from '@/api'
 
 const activeSheetIsShow = ref(false) // 是否显示添加框
 const accountArr = ref<accountProps[]>([]) // 账目列表
 const recordData = ref<accountProps | null>(null) // 当前需要修改的项目的数据
-
+// const globalStore = useGlobalStore()
 // 更新账单数据
 const changeAccount = (account: accountProps) => {
   activeSheetIsShow.value = true

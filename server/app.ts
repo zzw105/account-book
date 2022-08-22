@@ -2,11 +2,9 @@ import express = require('express')
 import cors = require('cors')
 import mysql = require('mysql')
 import { Request } from 'express'
-
-const jwt = require('jsonwebtoken')
-
-const { expressjwt } = require('express-jwt')
-
+import jwt = require('jsonwebtoken')
+import { expressjwt } from 'express-jwt'
+import log4js = require('log4js')
 const SECRET_KEY = 'kite1874'
 
 declare module 'express' {
@@ -41,13 +39,35 @@ app.use(
     secret: SECRET_KEY,
     algorithms: ['HS256'],
     getToken: (req) => {
-      return req.headers.token
+      return typeof req.headers.token === 'string' ? req.headers.token : ''
     }
   }).unless({
     path: ['/register', '/login']
   })
 )
 // 解析出来的信息在req.auth中
+log4js.configure({
+  appenders: {
+    ruleConsole: { type: 'console' },
+    ruleFile: {
+      type: 'dateFile',
+      // 这个目录是相对于根目录的，即与app.js 是同一级的
+      filename: 'logs/server-',
+      pattern: 'yyyy-MM-dd.log',
+      maxLogSize: 10 * 1000 * 1000,
+      numBackups: 3,
+      alwaysIncludePattern: true
+    }
+  },
+  categories: {
+    default: { appenders: ['ruleConsole', 'ruleFile'], level: 'info' }
+  }
+})
+var logger = log4js.getLogger('normal')
+
+//页面请求日志,用auto的话,默认级别是WARN
+//这样会自动记录每次请求信息，放在其他use上面
+app.use(log4js.connectLogger(logger, { level: 'debug', format: ':method :url' }))
 
 // 数据库信息
 const connection = mysql.createConnection({
@@ -60,16 +80,16 @@ const connection = mysql.createConnection({
 // 启动数据库连接
 connection.connect(function (err) {
   if (err) {
-    console.log('error', err)
+    logger.error('error', err)
   }
-  console.log('connect success!')
+  logger.info('connect success!')
 })
 
 // 获取用户列表
 const getUserRows = () => {
   connection.query('select * from user', function (err, row) {
     if (err) {
-      console.log('query error!')
+      logger.error('query error!')
     } else {
       userRows = row
     }
@@ -81,6 +101,7 @@ getUserRows()
 app.get('/', (req, res, a) => {
   res.json({ code: 200, data: userRows })
 })
+
 // 注册
 app.post('/register', (req, res) => {
   const body = req.body
@@ -111,7 +132,7 @@ app.post('/login', (req, res) => {
   const body = req.body
   const userInfo = userRows.find((item) => item.userName === body.userName)
   if (userInfo && userInfo.password === body.password) {
-    const tokenStr = jwt.sign({ userName: body.userName }, SECRET_KEY, { expiresIn: '1h' })
+    const tokenStr = jwt.sign({ userName: body.userName }, SECRET_KEY, { expiresIn: '72h' })
     res.json({
       code: 200,
       message: '登陆成功',
@@ -167,7 +188,7 @@ app.delete('/delAccount', (req: Request, res) => {
   const body = req.body
   connection.query('delete from book where id = ?', [body.id], (err, data) => {
     if (err) {
-      console.log(err)
+      logger.error(err)
       res.json({
         code: 400,
         message: '删除失败',
@@ -210,12 +231,12 @@ app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     return res.json({ code: 401, message: '登陆过期' })
   }
-  console.log(err)
+  logger.error(err)
 
   res.json({ code: 500, message: '未知错误' })
 })
 
 // 启动服务
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  logger.info(`Example app listening on port ${port}`)
 })

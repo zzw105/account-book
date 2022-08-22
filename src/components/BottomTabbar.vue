@@ -45,10 +45,10 @@ const onChange = (e: any) => {
       router.push({ name: 'home' })
       break
     case 1:
-      router.push({ name: 'asset' })
+      router.push({ name: 'calendar' })
       break
     case 2:
-      router.push({ name: 'calendar' })
+      router.push({ name: 'asset' })
       break
     case 3:
       router.push({ name: 'cart' })

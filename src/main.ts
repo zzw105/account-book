@@ -7,10 +7,12 @@ import 'vant/es/dialog/style'
 import 'vant/es/toast/style'
 import 'vant/es/notify/style'
 import 'vant/es/image-preview/style'
+import { createPinia } from 'pinia'
 
 const app = createApp(App)
 app
   .use(router)
+  .use(createPinia())
   .use(Button)
   .use(NavBar)
   .use(Field)
