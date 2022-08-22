@@ -57,20 +57,20 @@ import APIS from '@/api'
 import { Notify } from 'vant'
 import dayjs, { Dayjs } from 'dayjs'
 import { accountProps } from '@/@types/api'
+import { useGlobalStore } from '@/store/global'
 
 interface Props {
   activeSheetIsShow: boolean
   recordData?: accountProps | null
-  getAccount: () => void
 }
 
 const emit = defineEmits(['update:activeSheetIsShow'])
 const props = withDefaults(defineProps<Props>(), {
   activeSheetIsShow: false,
-  getAccount: () => {},
   recordData: null
 })
 
+const globalStore = useGlobalStore()
 const tabsActive = ref(0) // 选择的栏位
 const leaveOne = ref('其他') // 一级分类
 const leaveTwo = ref('其他') // 二级分类
@@ -112,7 +112,7 @@ const del = async () => {
   const res = await APIS.DEL_ACCOUNT({ id: id.value })
   if (res.code === 200) {
     emit('update:activeSheetIsShow', false)
-    props.getAccount()
+    globalStore.setAccountArr()
   }
 }
 
@@ -134,7 +134,7 @@ const addAccount = async () => {
   if (res.code === 200) {
     Notify({ type: 'success', message: '添加成功' })
     onClose()
-    props.getAccount()
+    globalStore.setAccountArr()
   }
 }
 

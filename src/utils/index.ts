@@ -1,5 +1,3 @@
-import APIS from '@/api'
-
 type checkStrType =
   | 'phone'
   | 'tel'
@@ -345,15 +343,8 @@ export const iconInfoList = [
 ]
 
 // 获取LocalStorage
-export const getLocalStorage = async (key: string) => {
-  let localStorageData = localStorage.getItem(key)
-  if (key === 'accountArr' && !localStorageData) {
-    const arr = await APIS.GET_ACCOUNT()
-    setLocalStorage('accountArr', JSON.stringify(arr.data))
-    localStorageData = JSON.stringify(arr.data)
-  }
-
-  return localStorageData
+export const getLocalStorage = (key: string) => {
+  return localStorage.getItem(key)
 }
 
 // 设置LocalStorage

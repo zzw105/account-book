@@ -35,11 +35,13 @@ import APIS from '@/api'
 import { checkStr, setLocalStorage } from '@/utils/index'
 import router from '@/router/index.js'
 import apis from '@/api/apis.js'
+import { useGlobalStore } from '@/store/global'
 
 const userName = ref('')
 const password = ref('')
 const checked = ref(false)
 const isLogin = ref(true)
+const globalStore = useGlobalStore()
 
 // 查看用户协议
 const read = () => {
@@ -70,9 +72,8 @@ const login = async () => {
 
     const res = await APIS.LOGIN(data)
     if (res.code === 200) {
-      // Notify({ type: 'success', message: '登陆成功' })
-      localStorage.setItem('token', res.token)
-      setLocalStorage('accountArr', '')
+      setLocalStorage('token', res.token)
+      await globalStore.setAccountArr()
       router.push({ name: 'home' })
     }
   } else {

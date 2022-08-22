@@ -4,7 +4,16 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useGlobalStore } from './store/global'
+const globalStore = useGlobalStore()
+
+onMounted(async () => {
+  // 初始化时请求一次数据
+  await globalStore.setAccountArr()
+})
+</script>
 
 <style lang="less">
 body {

@@ -1,4 +1,5 @@
 import { accountProps } from '@/@types/api'
+import APIS from '@/api'
 import { defineStore } from 'pinia'
 
 interface useGlobalStoreStateProps {
@@ -6,17 +7,26 @@ interface useGlobalStoreStateProps {
 }
 
 export const useGlobalStore = defineStore('storeId', {
+  // 开启数据持久化
+  persist: true,
   state: (): useGlobalStoreStateProps => {
     return {
       accountArr: []
     }
   },
   getters: {
-    getAccountArr: (state) => state.accountArr
+    /**
+     * @description: 获取全部账单
+     */
+    allAccountArr: (state) => state.accountArr
   },
   actions: {
-    setAccountArr(data: accountProps[]) {
-      this.accountArr = data
+    /**
+     * @description: 请求接口获取并设置全局账单
+     */
+    async setAccountArr() {
+      const res = await APIS.GET_ACCOUNT()
+      this.accountArr = res.data
     }
   }
 })

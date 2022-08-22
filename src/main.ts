@@ -8,11 +8,15 @@ import 'vant/es/toast/style'
 import 'vant/es/notify/style'
 import 'vant/es/image-preview/style'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
 const app = createApp(App)
 app
   .use(router)
-  .use(createPinia())
+  .use(pinia)
   .use(Button)
   .use(NavBar)
   .use(Field)

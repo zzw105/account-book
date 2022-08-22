@@ -5,8 +5,6 @@ import AssetPage from '@/pages/AssetPage.vue'
 import CalendarPage from '@/pages/CalendarPage.vue'
 import ChartPage from '@/pages/ChartPage.vue'
 import UserPage from '@/pages/UserPage.vue'
-import APIS from '@/api'
-import { setLocalStorage } from '@/utils'
 const routes = [
   { name: 'home', path: '/', component: HomePage },
   { name: 'login', path: '/login', component: LoginPage },
@@ -21,15 +19,15 @@ const router = VueRouter.createRouter({
   routes // `routes: routes` 的缩写
 })
 
-let first = true
+// let first = true
 
 // 全局前置守卫
 router.beforeEach(async (to, from) => {
-  if (from.fullPath === '/' && first) {
-    first = false
-    const arr = await APIS.GET_ACCOUNT()
-    setLocalStorage('accountArr', JSON.stringify(arr.data))
-  }
+  // if (from.fullPath === '/' && first) {
+  //   first = false
+  //   const arr = await APIS.GET_ACCOUNT()
+  //   setLocalStorage('accountArr', JSON.stringify(arr.data))
+  // }
 })
 
 export default router
