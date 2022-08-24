@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AccountItem: typeof import('./src/components/AccountItem.vue')['default']
     AddRecord: typeof import('./src/components/AddRecord.vue')['default']
+    AssetItem: typeof import('./src/components/AssetItem.vue')['default']
     BottomTabbar: typeof import('./src/components/BottomTabbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -20,6 +21,7 @@ declare module '@vue/runtime-core' {
     VanDatetimePicker: typeof import('vant/es')['DatetimePicker']
     VanField: typeof import('vant/es')['Field']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanPicker: typeof import('vant/es')['Picker']
     VanPopup: typeof import('vant/es')['Popup']
     VanTab: typeof import('vant/es')['Tab']
     VanTabbar: typeof import('vant/es')['Tabbar']

@@ -5,10 +5,12 @@ import AssetPage from '@/pages/AssetPage.vue'
 import CalendarPage from '@/pages/CalendarPage.vue'
 import ChartPage from '@/pages/ChartPage.vue'
 import UserPage from '@/pages/UserPage.vue'
+import AddAssetPage from '@/pages/AddAssetPage.vue'
 const routes = [
   { name: 'home', path: '/', component: HomePage },
   { name: 'login', path: '/login', component: LoginPage },
   { name: 'asset', path: '/asset', component: AssetPage },
+  { name: 'addAsset', path: '/addAsset', component: AddAssetPage },
   { name: 'calendar', path: '/calendar', component: CalendarPage },
   { name: 'cart', path: '/cart', component: ChartPage },
   { name: 'user', path: '/user', component: UserPage }

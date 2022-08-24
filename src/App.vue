@@ -12,6 +12,7 @@ const globalStore = useGlobalStore()
 onMounted(async () => {
   // 初始化时请求一次数据
   await globalStore.setAccountArr()
+  await globalStore.setAsset()
 })
 </script>
 

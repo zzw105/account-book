@@ -115,9 +115,29 @@ app.post('/register', (req, res) => {
 
     getUserRows()
 
-    res.json({
-      code: 200,
-      message: '注册成功'
+    connection.query('insert into asset set ?', { userName: body.userName, assetName: '默认账本', assetType: 1 }, (err) => {
+      if (err) {
+        res.json({
+          code: 400,
+          message: '注册失败',
+          err
+        })
+      } else {
+        connection.query('insert into asset set ?', { userName: body.userName, assetName: '花呗', assetType: 0 }, (err) => {
+          if (err) {
+            res.json({
+              code: 400,
+              message: '注册失败',
+              err
+            })
+          } else {
+            res.json({
+              code: 200,
+              message: '注册成功'
+            })
+          }
+        })
+      }
     })
   } else {
     res.json({
@@ -203,7 +223,7 @@ app.delete('/delAccount', (req: Request, res) => {
   })
 })
 
-// 根据用户名获取信息
+// 根据用户名获取账目列表
 app.get('/getAccount', (req: Request, res) => {
   connection.query('select * from book', function (err, row) {
     if (err) {
@@ -224,6 +244,116 @@ app.get('/getAccount', (req: Request, res) => {
       })
     }
   })
+})
+
+// 根据用户名获取账单列表
+app.get('/getAsset', (req: Request, res) => {
+  connection.query('select * from asset', function (err, row) {
+    if (err) {
+      res.json({
+        code: 400,
+        message: '获取失败',
+        err
+      })
+    } else {
+      const resData = row.filter((item) => item.userName === req.auth.userName)
+      res.json({
+        code: 200,
+        message: '获取成功',
+        data: resData
+      })
+    }
+  })
+})
+
+// 增加账户
+app.post('/addAsset', (req: Request, res) => {
+  const { assetName, price, assetType, dateTime, assetId, oldPrice } = req.body
+  if (assetId) {
+    connection.query('update asset set ?  where id = ?', [{ userName: req.auth.userName, assetName, assetType }, assetId], (err, data) => {
+      if (err) {
+        res.json({
+          code: 400,
+          message: '修改失败',
+          err
+        })
+      } else {
+        const differencePrice = price - oldPrice
+        if (differencePrice !== 0) {
+          connection.query(
+            'insert into book set ?',
+            {
+              userName: req.auth.userName,
+              type: price > 0 ? 1 : 0,
+              price: differencePrice,
+              leaveOne: '其他',
+              leaveTwo: '其他',
+              remarkText: '账户修改金额',
+              dateTime,
+              assetId: assetId
+            },
+            function (err) {
+              if (err) {
+                res.json({
+                  code: 400,
+                  message: '修改失败',
+                  err
+                })
+              } else {
+                res.json({
+                  code: 200,
+                  message: '修改成功'
+                })
+              }
+            }
+          )
+        } else {
+          res.json({
+            code: 200,
+            message: '修改成功'
+          })
+        }
+      }
+    })
+  } else {
+    connection.query('insert into asset set ?', { userName: req.auth.userName, assetName, assetType }, function (err, results) {
+      if (err) {
+        res.json({
+          code: 400,
+          message: '添加失败',
+          err
+        })
+      } else {
+        connection.query(
+          'insert into book set ?',
+          {
+            userName: req.auth.userName,
+            type: price > 0 ? 1 : 0,
+            price,
+            leaveOne: '其他',
+            leaveTwo: '其他',
+            remarkText: '账户初始化金额',
+            dateTime,
+            assetId: results.insertId
+          },
+          function (err) {
+            if (err) {
+              res.json({
+                code: 400,
+                message: '添加失败',
+                err
+              })
+            } else {
+              res.json({
+                code: 200,
+                message: '添加成功'
+              })
+            }
+          }
+        )
+      }
+    })
+  }
 })
 
 //定义一个抛出错误的中间件 当token失效时 返回信息

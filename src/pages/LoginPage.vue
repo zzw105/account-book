@@ -74,6 +74,7 @@ const login = async () => {
     if (res.code === 200) {
       setLocalStorage('token', res.token)
       await globalStore.setAccountArr()
+      await globalStore.setAsset()
       router.push({ name: 'home' })
     }
   } else {
