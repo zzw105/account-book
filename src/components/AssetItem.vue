@@ -28,8 +28,8 @@ const getAssetPrice = () => {
 
 const setAsset = () => {
   router.push({
-    name: 'addAsset',
-    params: { assetId: props.asset.id, price: getAssetPrice() }
+    name: 'assetDetail',
+    params: { assetId: props.asset.id }
   })
 }
 </script>

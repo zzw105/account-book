@@ -1,12 +1,15 @@
 <template>
   <div class="accountBox">
-    <div class="icon"><iconpark-icon size="24px" :name="findIcon(account.leaveTwo)"></iconpark-icon></div>
+    <div class="icon"><iconpark-icon size="24px" :name="findIcon()"></iconpark-icon></div>
     <div class="text">
-      <div class="title">{{ account.leaveOne }}-{{ account.leaveTwo }}</div>
+      <div class="title">
+        {{ account.leaveOne }} <template v-if="account.type === 0"> -{{ account.leaveTwo }} </template>
+      </div>
       <div class="remarkText">{{ account.remarkText }}</div>
     </div>
     <div class="priceTime">
-      <div class="price">-{{ -account.price }}</div>
+      <div v-if="account.price >= 0" class="price priceGreen">+{{ account.price }}</div>
+      <div v-else class="price">{{ account.price }}</div>
       <div class="time">{{ day.format('YYYY-MM-DD HH:mm') }}</div>
     </div>
   </div>
@@ -14,7 +17,7 @@
 
 <script setup lang="ts">
 import { accountProps } from '@/@types/api'
-import { iconInfoList } from '@/utils'
+import { expenditureIconInfoList, incomeIconInfoList } from '@/utils'
 import dayjs from 'dayjs'
 import { ref } from 'vue'
 
@@ -24,13 +27,21 @@ const props = defineProps<{
 
 const day = ref(dayjs(props.account.dateTime))
 
-const findIcon = (leaveTwo: string) => {
+const findIcon = () => {
   let iconName = ''
-  iconInfoList.forEach((item) => {
-    item.children.forEach((info) => {
-      if (info.name === leaveTwo) iconName = info.icon
+  const { leaveTwo, leaveOne, price } = props.account
+  if (price < 0) {
+    expenditureIconInfoList.forEach((item) => {
+      item.children.forEach((info) => {
+        if (info.name === leaveTwo) iconName = info.icon
+      })
     })
-  })
+  } else {
+    incomeIconInfoList.forEach((info) => {
+      if (info.name === leaveOne) iconName = info.icon
+    })
+  }
+
   return iconName
 }
 </script>
@@ -69,6 +80,9 @@ const findIcon = (leaveTwo: string) => {
       text-align: right;
       color: red;
       font-size: 18px;
+    }
+    .priceGreen {
+      color: green;
     }
     .time {
       font-size: 14px;

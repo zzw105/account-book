@@ -1,5 +1,14 @@
 <template>
-  <van-nav-bar left-text="返回" right-text="保存" left-arrow title="添加资产账户" :fixed="true" :placeholder="true" @click-left="onClickLeft" @click-right="onClickRight" />
+  <van-nav-bar
+    left-text="返回"
+    right-text="保存"
+    left-arrow
+    :title="`${route.params.assetId ? '修改' : '添加'}资产账户`"
+    :fixed="true"
+    :placeholder="true"
+    @click-left="onClickLeft"
+    @click-right="onClickRight"
+  />
   <van-cell-group inset class="addAsset">
     <van-field v-model="name" label="账户名称" placeholder="请输入账户名称" />
     <van-field v-model="price" type="number" label="账户余额" placeholder="请输入账户余额" />

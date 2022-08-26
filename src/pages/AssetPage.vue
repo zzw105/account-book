@@ -19,13 +19,13 @@
   <van-cell-group inset class="capitalAccount">
     <div class="title">资金账户</div>
     <template v-for="asset in globalStore.assetArr.filter((item) => item.assetType === 1)" :key="asset.id">
-      <AssetItem :asset="asset" :account-arr="globalStore.accountArrInAsset(asset.id)"></AssetItem>
+      <AssetItem :asset="asset" :account-arr="globalStore.getAccountArrByAssetId(asset.id)"></AssetItem>
     </template>
   </van-cell-group>
   <van-cell-group inset class="capitalAccount">
     <div class="title">信贷账户</div>
     <template v-for="asset in globalStore.assetArr.filter((item) => item.assetType === 0)" :key="asset.id">
-      <AssetItem :asset="asset" :account-arr="globalStore.accountArrInAsset(asset.id)"></AssetItem>
+      <AssetItem :asset="asset" :account-arr="globalStore.getAccountArrByAssetId(asset.id)"></AssetItem>
     </template>
   </van-cell-group>
   <div class="addBtn" @click="toAddAssetPage"><iconpark-icon name="plus"></iconpark-icon></div>

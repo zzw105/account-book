@@ -6,11 +6,13 @@ import CalendarPage from '@/pages/CalendarPage.vue'
 import ChartPage from '@/pages/ChartPage.vue'
 import UserPage from '@/pages/UserPage.vue'
 import AddAssetPage from '@/pages/AddAssetPage.vue'
+import AssetDetailsPage from '@/pages/AssetDetailsPage.vue'
 const routes = [
   { name: 'home', path: '/', component: HomePage },
   { name: 'login', path: '/login', component: LoginPage },
   { name: 'asset', path: '/asset', component: AssetPage },
   { name: 'addAsset', path: '/addAsset', component: AddAssetPage },
+  { name: 'assetDetail', path: '/assetDetail', component: AssetDetailsPage },
   { name: 'calendar', path: '/calendar', component: CalendarPage },
   { name: 'cart', path: '/cart', component: ChartPage },
   { name: 'user', path: '/user', component: UserPage }
@@ -25,11 +27,9 @@ const router = VueRouter.createRouter({
 
 // 全局前置守卫
 router.beforeEach(async (to, from) => {
-  // if (from.fullPath === '/' && first) {
-  //   first = false
-  //   const arr = await APIS.GET_ACCOUNT()
-  //   setLocalStorage('accountArr', JSON.stringify(arr.data))
-  // }
+  if (to.name === 'assetDetail' && !to.params.assetId) {
+    router.push({ name: 'asset' })
+  }
 })
 
 export default router

@@ -16,14 +16,24 @@
           </template>
         </van-field>
       </van-cell-group>
+      <van-cell-group v-if="!isLogin" inset>
+        <van-field v-model="passwordTwo" type="password" placeholder="请重复输入密码">
+          <template #left-icon>
+            <iconpark-icon name="lock"></iconpark-icon>
+          </template>
+        </van-field>
+      </van-cell-group>
       <van-cell-group inset>
         <van-button type="primary" block @click="login">{{ isLogin ? '登陆' : '注册' }}</van-button>
       </van-cell-group>
       <div class="bottom">
         <div @click="changeLogin">{{ !isLogin ? '前往登陆' : '前往注册' }}</div>
-        <div v-show="isLogin" @click="test">忘记密码</div>
+        <div v-show="isLogin" @click="forgotPassword">忘记密码</div>
       </div>
-      <div class="checkBox"><van-checkbox v-model="checked" icon-size="15px">已阅读并同意</van-checkbox><a href="JavaScript:;" @click="read">《用户协议》</a></div>
+      <div v-if="!isLogin" class="checkBox">
+        <van-checkbox v-model="checked" icon-size="15px">已阅读并同意</van-checkbox>
+        <a href="JavaScript:;" @click="read">《用户协议》</a>
+      </div>
     </div>
   </div>
 </template>
@@ -34,11 +44,11 @@ import { Dialog, Notify } from 'vant'
 import APIS from '@/api'
 import { checkStr, setLocalStorage } from '@/utils/index'
 import router from '@/router/index.js'
-import apis from '@/api/apis.js'
 import { useGlobalStore } from '@/store/global'
 
 const userName = ref('')
 const password = ref('')
+const passwordTwo = ref('')
 const checked = ref(false)
 const isLogin = ref(true)
 const globalStore = useGlobalStore()
@@ -91,6 +101,10 @@ const login = async () => {
       Notify({ type: 'warning', message: '请阅读并同意《用户协议》' })
       return
     }
+    if (password.value !== passwordTwo.value) {
+      Notify({ type: 'warning', message: '两次密码必须相同' })
+      return
+    }
     const res = await APIS.REGISTER(data)
     if (res.code === 200) {
       Notify({ type: 'success', message: '注册成功' })
@@ -102,9 +116,10 @@ const login = async () => {
 }
 
 // 测试
-const test = async () => {
-  const a = await apis.TEST()
-  console.log(a)
+const forgotPassword = async () => {
+  Dialog.alert({
+    message: '如有密码忘记的情况请联系管理员'
+  })
 }
 </script>
 

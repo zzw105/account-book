@@ -63,8 +63,8 @@ export const checkStr = (str: string, type: checkStrType) => {
   }
 }
 
-// 图标列表树
-export const iconInfoList = [
+// 支出图标列表树
+export const expenditureIconInfoList = [
   {
     name: '购物消费',
     icon: 'buy',
@@ -339,6 +339,65 @@ export const iconInfoList = [
         icon: 'more-four'
       }
     ]
+  }
+]
+
+// 收入图标列表树
+export const incomeIconInfoList = [
+  {
+    name: '其他',
+    icon: 'bank-card',
+    children: []
+  },
+  {
+    name: '中奖',
+    icon: 'trophy',
+    children: []
+  },
+  {
+    name: '理财盈余',
+    icon: 'heavy-metal',
+    children: []
+  },
+  {
+    name: '礼金人情',
+    icon: 'personal-collection',
+    children: []
+  },
+  {
+    name: '借入',
+    icon: 'income',
+    children: []
+  },
+  {
+    name: '奖金',
+    icon: 'necktie',
+    children: []
+  },
+  {
+    name: '兼职外快',
+    icon: 'hourglass-full',
+    children: []
+  },
+  {
+    name: '工资',
+    icon: 'wallet-one',
+    children: []
+  },
+  {
+    name: '二手闲置',
+    icon: 'box',
+    children: []
+  },
+  {
+    name: '补贴',
+    icon: 'like',
+    children: []
+  },
+  {
+    name: '报销',
+    icon: 'doc-detail',
+    children: []
   }
 ]
 

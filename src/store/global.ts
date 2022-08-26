@@ -27,9 +27,14 @@ export const useGlobalStore = defineStore('storeId', {
     /**
      * @description: 获取当前账户的账单
      */
-    accountArrInAsset: (state) => {
+    getAccountArrByAssetId: (state) => {
       return (assetId: number) => {
         return state.accountArr.filter((item) => item.assetId === assetId)
+      }
+    },
+    getAssetById: (state) => {
+      return (assetId: number) => {
+        return state.assetArr.find((item) => item.id === assetId) || { id: -1, userName: '', assetName: '', assetType: -1 }
       }
     }
   },
