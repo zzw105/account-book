@@ -3,7 +3,7 @@
     <template #left>
       <div class="leftIcon">
         <iconpark-icon name="bookmark-three-66p67o22" size="23px"></iconpark-icon>
-        <span>账本 v0.1.0</span>
+        <span>账本 v0.1.1</span>
       </div>
     </template>
   </van-nav-bar>
