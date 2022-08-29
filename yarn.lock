@@ -399,6 +399,11 @@
   dependencies:
     "@popperjs/core" "^2.9.2"
 
+"@vant/touch-emulator@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npmmirror.com/@vant/touch-emulator/-/touch-emulator-1.4.0.tgz#02420ca5f312a7eb6c36c349cbb8e80e6f29ff2f"
+  integrity sha512-Zt+zISV0+wpOew2S1siOJ3G22y+hapHAKmXM+FhpvWzsRc4qahaYXatCAITuuXt0EcDp7WvEeTO4F7p9AtX/pw==
+
 "@vant/use@^1.4.1":
   version "1.4.1"
   resolved "https://registry.npmmirror.com/@vant/use/-/use-1.4.1.tgz#22cdd81c6e2cf8dc746278608a3facbd4fdbcdc7"

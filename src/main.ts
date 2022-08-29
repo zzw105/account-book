@@ -9,6 +9,7 @@ import 'vant/es/notify/style'
 import 'vant/es/image-preview/style'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import '@vant/touch-emulator'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
