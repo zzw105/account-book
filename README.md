@@ -1,12 +1,17 @@
-git commit
+# 105 的账本 v0.1.1
 
-feat : 新功能
-fix : 修复 bug
-docs : 文档改变
-style : 代码格式改变
-refactor : 某个已有功能重构
-perf : 性能优化
-test : 增加测试
-build : 改变了 build 工具 如 grunt 换成了 npm
-revert : 撤销上一次的 commit
-chore : 构建过程或辅助工具的变动
+一款个人开发的记账软件
+
+## 技术栈
+
+前端基于 vue3+vant3+ts+pinia
+
+后端基于 node+express
+
+## 软件截图
+
+![alt](public/md/img/1.jpg)
+![alt](public/md/img/2.jpg)
+![alt](public/md/img/3.jpg)
+![alt](public/md/img/4.jpg)
+![alt](public/md/img/5.jpg)
