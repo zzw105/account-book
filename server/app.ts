@@ -4,7 +4,6 @@ import mysql = require('mysql')
 import { Request } from 'express'
 import jwt = require('jsonwebtoken')
 import { expressjwt } from 'express-jwt'
-import log4js = require('log4js')
 const SECRET_KEY = 'kite1874'
 
 declare module 'express' {
@@ -45,30 +44,6 @@ app.use(
     path: ['/register', '/login']
   })
 )
-// 解析出来的信息在req.auth中
-log4js.configure({
-  appenders: {
-    ruleConsole: { type: 'console' },
-    ruleFile: {
-      type: 'dateFile',
-      // 这个目录是相对于根目录的，即与app.js 是同一级的
-      filename: 'logs/server-',
-      pattern: 'yyyy-MM-dd.log',
-      maxLogSize: 10 * 1000 * 1000,
-      numBackups: 3,
-      alwaysIncludePattern: true
-    }
-  },
-  categories: {
-    default: { appenders: ['ruleConsole', 'ruleFile'], level: 'info' }
-  }
-})
-var logger = log4js.getLogger('normal')
-
-//页面请求日志,用auto的话,默认级别是WARN
-//这样会自动记录每次请求信息，放在其他use上面
-app.use(log4js.connectLogger(logger, { level: 'debug', format: ':method :url' }))
-
 // 数据库信息
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -80,16 +55,16 @@ const connection = mysql.createConnection({
 // 启动数据库连接
 connection.connect(function (err) {
   if (err) {
-    logger.error('error', err)
+    console.log('error', err)
   }
-  logger.info('connect success!')
+  console.log('connect success!')
 })
 
 // 获取用户列表
 const getUserRows = () => {
   connection.query('select * from user', function (err, row) {
     if (err) {
-      logger.error('query error!')
+      console.log('query error!')
     } else {
       userRows = row
     }
@@ -208,7 +183,7 @@ app.delete('/delAccount', (req: Request, res) => {
   const body = req.body
   connection.query('delete from book where id = ?', [body.id], (err, data) => {
     if (err) {
-      logger.error(err)
+      console.log(err)
       res.json({
         code: 400,
         message: '删除失败',
@@ -361,12 +336,12 @@ app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     return res.json({ code: 401, message: '登陆过期' })
   }
-  logger.error(err)
+  console.log(err)
 
   res.json({ code: 500, message: '未知错误' })
 })
 
 // 启动服务
 app.listen(port, () => {
-  logger.info(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`)
 })
