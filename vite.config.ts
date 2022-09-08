@@ -42,5 +42,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'vueDist'
-  }
+  },
+  // 配制打包后引用路径
+  base: './'
 })
