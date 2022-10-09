@@ -11,6 +11,7 @@ node_modules
 dist
 vueDist
 expressDist
+files
 dist-ssr
 *.local
 

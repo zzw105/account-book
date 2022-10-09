@@ -4,8 +4,18 @@ import mysql = require('mysql')
 import { Request } from 'express'
 import jwt = require('jsonwebtoken')
 import { expressjwt } from 'express-jwt'
-const SECRET_KEY = 'kite1874'
+import multiparty = require('multiparty')
+import fs = require('fs')
 
+const AipOcrClient = require('baidu-aip-sdk').ocr
+const SECRET_KEY = 'kite1874'
+// 设置APPID/AK/SK
+const BAIDU_APP_ID = '27283351'
+const BAIDU_API_KEY = 'ctngrgHXWTy4hYflftY7o1r4'
+const BAIDU_SECRET_KEY = 'Kjk1OXk2KWHrebXYH6ciCQRfL5fYkH2O'
+
+// 新建一个对象，建议只保存一个对象调用服务接口
+const client = new AipOcrClient(BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY)
 declare module 'express' {
   // eslint-disable-next-line no-unused-vars
   interface Request {
@@ -41,7 +51,7 @@ app.use(
       return typeof req.headers.token === 'string' ? req.headers.token : ''
     }
   }).unless({
-    path: ['/register', '/login']
+    path: ['/register', '/login', '/upload']
   })
 )
 // 数据库信息
@@ -73,7 +83,7 @@ const getUserRows = () => {
 getUserRows()
 
 // 首页请求 用于查看服务
-app.get('/', (req, res, a) => {
+app.get('/', (_req, res, _a) => {
   res.json({ code: 200, data: userRows })
 })
 
@@ -161,7 +171,7 @@ app.post('/addAccount', (req: Request, res) => {
       }
     })
   } else {
-    connection.query('update book set ?  where id = ?', [body, body.id], (err, data) => {
+    connection.query('update book set ?  where id = ?', [body, body.id], (err, _data) => {
       if (err) {
         res.json({
           code: 400,
@@ -181,7 +191,7 @@ app.post('/addAccount', (req: Request, res) => {
 // 删除信息
 app.delete('/delAccount', (req: Request, res) => {
   const body = req.body
-  connection.query('delete from book where id = ?', [body.id], (err, data) => {
+  connection.query('delete from book where id = ?', [body.id], (err, _data) => {
     if (err) {
       console.log(err)
       res.json({
@@ -245,7 +255,7 @@ app.get('/getAsset', (req: Request, res) => {
 app.post('/addAsset', (req: Request, res) => {
   const { assetName, price, assetType, dateTime, assetId, oldPrice } = req.body
   if (assetId) {
-    connection.query('update asset set ?  where id = ?', [{ userName: req.auth.userName, assetName, assetType }, assetId], (err, data) => {
+    connection.query('update asset set ?  where id = ?', [{ userName: req.auth.userName, assetName, assetType }, assetId], (err, _data) => {
       if (err) {
         res.json({
           code: 400,
@@ -331,8 +341,40 @@ app.post('/addAsset', (req: Request, res) => {
   }
 })
 
+// 根据用户名获取账单列表
+app.post('/upload', (req: Request, res) => {
+  /* 生成multiparty对象，并配置上传目标路径 */
+  const form = new multiparty.Form()
+  // // 设置编码
+  // form.encoding = 'utf-8'
+  // // 设置文件存储路径，以当前编辑的文件为相对路径
+  const uploadDir = './files'
+  // 设置文件大小限制
+  // form.maxFilesSize = 1 * 1024 * 1024;
+  form.parse(req, function (_err, _fields, files) {
+    console.log(files)
+
+    try {
+      const inputFile = files.file[0]
+      console.log(inputFile)
+
+      const newPath = uploadDir + '/' + inputFile.originalFilename //oldPath  不得作更改，使用默认上传路径就好
+      // 同步重命名文件名 fs.renameSync(oldPath, newPath)
+      fs.renameSync(inputFile.path, newPath)
+      const image = fs.readFileSync(newPath).toString('base64')
+      client.generalBasic(image).then(function (result) {
+        console.log(result)
+        res.json({ code: 200, data: result, fileName: inputFile.originalFilename })
+      })
+    } catch (err) {
+      console.log(err)
+      res.json({ data: '上传失败！' })
+    }
+  })
+})
+
 //定义一个抛出错误的中间件 当token失效时 返回信息
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   if (err.name === 'UnauthorizedError') {
     return res.json({ code: 401, message: '登陆过期' })
   }

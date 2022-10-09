@@ -63,7 +63,9 @@ const read = () => {
 
 // 切换登陆注册状态
 const changeLogin = () => {
-  isLogin.value = !isLogin.value
+  // 暂时不开放注册
+  // isLogin.value = !isLogin.value
+  Notify({ type: 'warning', message: '暂时不开放注册，请联系管理员' })
 }
 
 // 登陆注册
